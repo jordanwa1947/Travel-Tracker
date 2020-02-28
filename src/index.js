@@ -17,16 +17,23 @@ domUpdates.insertLoginForm();
 
 $('#login-button').click(logUserIn);
 
+function fetchUserInfo() {
+  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/travelers/travelers/50')
+    .then(response => response.json())
+    .then(userData => {
+      user = userData;
+      domUpdates.insertUserMessage(user);
+  });
+}
+
 function logUserIn() {
   const username = $('#username-input')[0].value
   const password = $('#password-input')[0].value
   if (username === 'traveler50' && password === 'travel2020') {
     domUpdates.removeLoginForm();
-    fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/travelers/travelers/50')
-      .then(response => response.json())
-      .then(userData => {
-        user = userData;
-        domUpdates.insertUserMessage(user);
-      })
+    fetchUserInfo();
+  } else if (username === 'agency' && password === 'travel2020') {
+    domUpdates.removeLoginForm();
+    fetchUserInfo();
   }
 }
