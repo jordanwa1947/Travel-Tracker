@@ -10,4 +10,12 @@ import './css/styles.scss';
 // An e xample of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/turing-logo.png'
 
-console.log('This is the JavaScript entry file - your code begins here.');
+$('#login-button').click(logUserIn);
+
+function logUserIn() {
+  const username = $('#username-input')[0].value
+  const password = $('#password-input')[0].value
+  if (username === 'traveler50' && password === 'travel2020') {
+    $('#login-form-sect').toggleClass('hidden');
+  }
+}
