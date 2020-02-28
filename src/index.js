@@ -10,6 +10,8 @@ import './css/styles.scss';
 // An e xample of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/turing-logo.png'
 
+let user;
+
 $('#login-button').click(logUserIn);
 
 function logUserIn() {
@@ -17,5 +19,10 @@ function logUserIn() {
   const password = $('#password-input')[0].value
   if (username === 'traveler50' && password === 'travel2020') {
     $('#login-form-sect').toggleClass('hidden');
+    fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/travelers/travelers/50')
+      .then(response => response.json())
+      .then(userData => {
+        user = userData;
+      })
   }
 }
