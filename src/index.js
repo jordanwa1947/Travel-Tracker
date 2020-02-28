@@ -13,13 +13,15 @@ import './images/turing-logo.png'
 
 let user;
 
+domUpdates.insertLoginForm();
+
 $('#login-button').click(logUserIn);
 
 function logUserIn() {
   const username = $('#username-input')[0].value
   const password = $('#password-input')[0].value
   if (username === 'traveler50' && password === 'travel2020') {
-    $('#login-form-sect').toggleClass('hidden');
+    domUpdates.removeLoginForm();
     fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/travelers/travelers/50')
       .then(response => response.json())
       .then(userData => {
