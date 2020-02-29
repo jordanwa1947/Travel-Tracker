@@ -20,5 +20,19 @@ export default {
 
   removeLoginForm: () => {
     $('#login-form-sect')[0].innerHTML = ``;
+  },
+
+  insertTripsList: (trips) => {
+    const tripsHTML = trips.reduce((tripListHTML, trip) => {
+      tripListHTML += `
+        <li>
+          <span>Date: ${trip.date}</span>
+          <span>Status: ${trip.status}</span>
+          <span>${trip.duration} Days</span>
+        </li>
+      `
+      return tripListHTML;
+    }, ``);
+    $('#trips-list')[0].innerHTML = `<ul>${tripsHTML}</ul>`;
   }
 }
