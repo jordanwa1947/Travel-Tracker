@@ -5,6 +5,8 @@
 import $ from 'jquery';
 import domUpdates from './dom-updates.js'
 
+import Trip from './trip';
+
 // An example of how you tell webpack to use a CSS (SCSS) file
 import './css/styles.scss';
 
@@ -26,14 +28,25 @@ function fetchUserInfo() {
   });
 }
 
+function fetchTripsInfo() {
+  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/trips/trips')
+    .then(response => response.json())
+    .then(tripData => {
+      const userTrips = new Trip(tripData.trips).findUserTrips(50);
+      domUpdates.insertTripsList(userTrips);
+    });
+}
+
 function logUserIn() {
   const username = $('#username-input')[0].value
   const password = $('#password-input')[0].value
   if (username === 'traveler50' && password === 'travel2020') {
     domUpdates.removeLoginForm();
     fetchUserInfo();
+    fetchTripsInfo();
   } else if (username === 'agency' && password === 'travel2020') {
     domUpdates.removeLoginForm();
     fetchUserInfo();
+    fetchTripsInfo();
   }
 }
