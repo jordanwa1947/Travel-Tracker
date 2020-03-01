@@ -22,17 +22,19 @@ export default {
     $('#login-form-sect')[0].innerHTML = ``;
   },
 
-  insertTripsList: (trips) => {
+  insertTripsList: (trips, totalSpentOnTrips) => {
     const tripsHTML = trips.reduce((tripListHTML, trip) => {
       tripListHTML += `
         <li>
-          <span>Date: ${trip.date}</span>
           <span>Status: ${trip.status}</span>
+          <span>Date: ${trip.date}</span>
           <span>${trip.duration} Days</span>
-        </li>
-      `
+          <span>${trip.travelers}</span>
+        </li>`
       return tripListHTML;
     }, ``);
-    $('#trips-list')[0].innerHTML = `<ul>${tripsHTML}</ul>`;
+    $('#trips-list')[0].innerHTML = `
+      <h3>Total Spent on Trips: ${totalSpentOnTrips}</h3>
+      <ul>${tripsHTML}</ul>`;
   }
 }
