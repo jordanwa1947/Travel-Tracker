@@ -28,13 +28,49 @@ function fetchUserInfo() {
   });
 }
 
-function fetchTripsInfo() {
+async function fetchTripsInfo(displayTripsFunction) {
+  const destinationsData = await fetchDestinations();
   fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/trips/trips')
     .then(response => response.json())
     .then(tripData => {
-      const userTrips = new Trip(tripData.trips).findUserTrips(50);
-      domUpdates.insertTripsList(userTrips);
+      displayTripsFunction(tripData, destinationsData)
     });
+}
+
+function fetchDestinations() {
+  return fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/destinations/destinations')
+    .then(response => response.json())
+    .then(destinationsData => {
+      return destinationsData.destinations;
+    });
+}
+
+function getAndDisplayUserTrips(tripsData, destinationsData) {
+  const trip = new Trip(tripsData.trips)
+  const userTrips = trip.filterTripsByField('userID', 50);
+  const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData, 50);
+  const agentFee = totalSpentOnTrips * 0.1
+  domUpdates.insertTripsList(userTrips);
+  domUpdates.insertTotalSpentOnTrips(totalSpentOnTrips + agentFee);
+}
+
+function formatDate() {
+  const date = new Date()
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  if (day < 10) day = '0' + day;
+  if (month < 10) month = '0' + month;
+  return date.getFullYear() + '/' + month + '/' + day;
+}
+
+function getAndDisplayAgentTrips(tripsData, destinationsData) {
+  const trip = new Trip(tripsData.trips)
+  const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData);
+  const pendingTrips = trip.filterTripsByField('status', 'pending');
+  const usersOnTripsToday = trip.filterTripsByField('date', formatDate());
+  domUpdates.insertTripsList(pendingTrips);
+  domUpdates.insertAgencyProfit(totalSpentOnTrips * 0.1);
+  domUpdates.insertNumberOfUserOnTripsToday(usersOnTripsToday.length);
 }
 
 function logUserIn() {
@@ -43,10 +79,10 @@ function logUserIn() {
   if (username === 'traveler50' && password === 'travel2020') {
     domUpdates.removeLoginForm();
     fetchUserInfo();
-    fetchTripsInfo();
+    fetchTripsInfo(getAndDisplayUserTrips);
   } else if (username === 'agency' && password === 'travel2020') {
     domUpdates.removeLoginForm();
     fetchUserInfo();
-    fetchTripsInfo();
+    fetchTripsInfo(getAndDisplayAgentTrips);
   }
 }
