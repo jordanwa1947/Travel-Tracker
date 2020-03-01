@@ -11,15 +11,15 @@ class Trip {
 
   calculateTotalSpentOnTrips(destinations, userId) {
     const userTrips = this.findUserTrips(userId);
-    return userTrips.reduce((totalCost, userTrip) => {
+    const totalTripCost =  userTrips.reduce((totalCost, userTrip) => {
       let userDestination = destinations.find(destination => {
         return destination.id === userTrip.destinationID
       });
       let lodgingCost = userDestination.estimatedLodgingCostPerDay * userTrip.duration * userTrip.travelers;
       let travelCost = userDestination.estimatedFlightCostPerPerson * userTrip.travelers;
-      // console.log(lodgingCost, travelCost);
       return totalCost + lodgingCost + travelCost;
     }, 0)
+    return totalTripCost + totalTripCost * 0.1;
   }
 }
 
