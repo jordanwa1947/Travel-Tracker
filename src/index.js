@@ -29,16 +29,17 @@ function fetchUserInfo() {
 }
 
 function getAndDisplayUserTrips(tripsData, destinationsData) {
-  const trips = new Trip(tripsData.trips)
-  const userTrips = trips.findUserTrips(50);
-  const totalSpentOnTrips = trips.calculateTotalSpentOnTrips(destinationsData, 50);
+  const trip = new Trip(tripsData.trips)
+  const userTrips = trip.findUserTrips(50);
+  const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData, 50);
   domUpdates.insertTripsList(userTrips, totalSpentOnTrips);
 }
 
 function getAndDisplayAgentTrips(tripsData, destinationsData) {
-  const trips = new Trip(tripsData.trips)
-  const totalSpentOnTrips = trips.calculateTotalSpentOnTrips(destinationsData);
-  domUpdates.insertTripsList(tripsData.trips, totalSpentOnTrips);
+  const trip = new Trip(tripsData.trips)
+  const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData);
+  const pendingTrips = trip.findTripsByStatus('pending');
+  domUpdates.insertTripsList(pendingTrips, totalSpentOnTrips);
 }
 
 async function fetchTripsInfo(displayTripsFunction) {

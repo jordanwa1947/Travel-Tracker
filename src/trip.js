@@ -9,6 +9,12 @@ class Trip {
     })
   }
 
+  findTripsByStatus(status) {
+    return this.tripData.filter(tripData => {
+      return tripData.status === status;
+    })
+  }
+
   calculateTotalSpentOnTrips(destinations, userId) {
     const userTrips = userId ? this.findUserTrips(userId) : this.tripData;
     const totalTripCost =  userTrips.reduce((totalCost, userTrip) => {

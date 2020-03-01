@@ -65,4 +65,30 @@ describe('Trip Class', function() {
     const tripCost = new Trip(tripsData).calculateTotalSpentOnTrips(destinations, 43);
     expect(tripCost).to.eq(3476);
   });
+
+  it('should be able to find pending trip requests for an agent', function() {
+    const pendingTrips = new Trip(tripsData).findTripsByStatus('pending');
+    expect(pendingTrips).to.deep.eq([
+      {
+        "date": "2020/10/04",
+        "destinationID": 25,
+        "duration": 18,
+        "id": 2,
+        "status": "pending",
+        "suggestedActivities": [],
+        "travelers": 5,
+        "userID": 35,
+      },
+      {
+        "date": "2020/05/22",
+        "destinationID": 22,
+        "duration": 17,
+        "id": 3,
+        "status": "pending",
+        "suggestedActivities": [],
+        "travelers": 4,
+        "userID": 3,
+      }
+    ]);
+  })
 });
