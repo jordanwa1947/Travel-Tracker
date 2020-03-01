@@ -67,7 +67,7 @@ function getAndDisplayAgentTrips(tripsData, destinationsData) {
   const trip = new Trip(tripsData.trips)
   const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData);
   const pendingTrips = trip.filterTripsByField('status', 'pending');
-  const usersOnTripsToday = trip.filterTripsByField('date', formatDate());
+  const usersOnTripsToday = trip.findTripsHappeningCurrently();
   domUpdates.insertTripsList(pendingTrips);
   domUpdates.insertAgencyProfit(totalSpentOnTrips * 0.1);
   domUpdates.insertNumberOfUserOnTripsToday(usersOnTripsToday.length);

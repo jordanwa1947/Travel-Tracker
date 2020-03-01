@@ -11,8 +11,8 @@ describe('Trip Class', function() {
       {"id":1,"userID":43,"destinationID":49,"travelers":1,"date":"2019/09/16","duration":8,"status":"approved","suggestedActivities":[]},
       {"id":2,"userID":35,"destinationID":14,"travelers":5,"date":"2020/02/25","duration":18,"status":"pending","suggestedActivities":[]},
       {"id":3,"userID":3,"destinationID":49,"travelers":4,"date":"2020/05/22","duration":17,"status":"pending","suggestedActivities":[]},
-      {"id":4,"userID":43,"destinationID":14,"travelers":2,"date":"2020/02/25","duration":10,"status":"approved","suggestedActivities":[]},
-      {"id":5,"userID":42,"destinationID":14,"travelers":3,"date":"2020/02/25","duration":18,"status":"approved","suggestedActivities":[]},
+      {"id":4,"userID":43,"destinationID":14,"travelers":2,"date":"2020/02/20","duration":10,"status":"approved","suggestedActivities":[]},
+      {"id":5,"userID":42,"destinationID":14,"travelers":3,"date":"2020/02/29","duration":10,"status":"approved","suggestedActivities":[]},
       {"id":6,"userID":29,"destinationID":14,"travelers":3,"date":"2020/06/29","duration":9,"status":"approved","suggestedActivities":[]}
     ]
 
@@ -41,7 +41,7 @@ describe('Trip Class', function() {
         "userID": 43,
       },
       {
-        "date": "2020/02/25",
+        "date": "2020/02/20",
         "destinationID": 14,
         "duration": 10,
         "id": 4,
@@ -55,12 +55,12 @@ describe('Trip Class', function() {
 
   it('should be able to calculate the total a user has spent on trips', function() {
     const tripCost = new Trip(tripsData).calculateTotalSpentOnTrips(destinations, 43);
-    expect(tripCost).to.eq(1936);
+    expect(tripCost).to.eq(1760);
   });
 
   it('should calculate the total spent on all trips if no user id is given', function() {
     const tripCost = new Trip(tripsData).calculateTotalSpentOnTrips(destinations);
-    expect(tripCost).to.eq(15785);
+    expect(tripCost).to.eq(13630);
   });
 
   it('should be able to find pending trip requests for an agent', function() {
@@ -90,7 +90,7 @@ describe('Trip Class', function() {
   })
 
   it('should be able to find Number of travelers on trips for a date', function() {
-    const todaysTrips = new Trip(tripsData).filterTripsByField("date", "2020/02/25");
+    const todaysTrips = new Trip(tripsData).findTripsHappeningCurrently();
     expect(todaysTrips).to.deep.eq([
       {
         "date": "2020/02/25",
@@ -103,19 +103,9 @@ describe('Trip Class', function() {
         "userID": 35,
       },
       {
-        "date": "2020/02/25",
+        "date": "2020/02/29",
         "destinationID": 14,
         "duration": 10,
-        "id": 4,
-        "status": "approved",
-        "suggestedActivities": [],
-        "travelers": 2,
-        "userID": 43,
-      },
-      {
-        "date": "2020/02/25",
-        "destinationID": 14,
-        "duration": 18,
         "id": 5,
         "status": "approved",
         "suggestedActivities": [],
