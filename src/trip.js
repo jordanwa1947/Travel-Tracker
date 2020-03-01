@@ -19,7 +19,7 @@ class Trip {
       let travelCost = userDestination.estimatedFlightCostPerPerson * userTrip.travelers;
       return totalCost + lodgingCost + travelCost;
     }, 0)
-    return totalTripCost + totalTripCost * 0.1;
+    return totalTripCost;
   }
 }
 

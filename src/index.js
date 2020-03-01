@@ -49,8 +49,9 @@ function getAndDisplayUserTrips(tripsData, destinationsData) {
   const trip = new Trip(tripsData.trips)
   const userTrips = trip.filterTripsByField('userID', 50);
   const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData, 50);
+  const agentFee = totalSpentOnTrips * 0.1
   domUpdates.insertTripsList(userTrips);
-  domUpdates.insertTotalSpentOnTrips(totalSpentOnTrips);
+  domUpdates.insertTotalSpentOnTrips(totalSpentOnTrips + agentFee);
 }
 
 function formatDate() {
@@ -68,7 +69,7 @@ function getAndDisplayAgentTrips(tripsData, destinationsData) {
   const pendingTrips = trip.filterTripsByField('status', 'pending');
   const usersOnTripsToday = trip.filterTripsByField('date', formatDate());
   domUpdates.insertTripsList(pendingTrips);
-  domUpdates.insertTotalSpentOnTrips(totalSpentOnTrips);
+  domUpdates.insertAgencyProfit(totalSpentOnTrips * 0.1);
   domUpdates.insertNumberOfUserOnTripsToday(usersOnTripsToday.length);
 }
 

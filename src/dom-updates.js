@@ -40,6 +40,10 @@ export default {
     $('#total-spent-on-trips')[0].innerText = `Total Spent on Trips: ${totalSpentOnTrips}`
   },
 
+  insertAgencyProfit: (grossProfit) => {
+    $('#total-profit-on-trips')[0].innerText = `Total Proft on Trips: ${grossProfit}`
+  },
+
   insertNumberOfUserOnTripsToday: (numberOfUserOnTripsToday) => {
     $('#numb-of-users-on-trips-today')[0].innerText = `Number of Users On Trips Today: ${numberOfUserOnTripsToday}`
   }
