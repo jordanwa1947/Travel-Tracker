@@ -28,20 +28,6 @@ function fetchUserInfo() {
   });
 }
 
-function getAndDisplayUserTrips(tripsData, destinationsData) {
-  const trip = new Trip(tripsData.trips)
-  const userTrips = trip.findUserTrips(50);
-  const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData, 50);
-  domUpdates.insertTripsList(userTrips, totalSpentOnTrips);
-}
-
-function getAndDisplayAgentTrips(tripsData, destinationsData) {
-  const trip = new Trip(tripsData.trips)
-  const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData);
-  const pendingTrips = trip.findTripsByStatus('pending');
-  domUpdates.insertTripsList(pendingTrips, totalSpentOnTrips);
-}
-
 async function fetchTripsInfo(displayTripsFunction) {
   const destinationsData = await fetchDestinations();
   fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/trips/trips')
@@ -57,6 +43,20 @@ function fetchDestinations() {
     .then(destinationsData => {
       return destinationsData.destinations;
     });
+}
+
+function getAndDisplayUserTrips(tripsData, destinationsData) {
+  const trip = new Trip(tripsData.trips)
+  const userTrips = trip.filterTripsByField('userID', 50);
+  const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData, 50);
+  domUpdates.insertTripsList(userTrips, totalSpentOnTrips);
+}
+
+function getAndDisplayAgentTrips(tripsData, destinationsData) {
+  const trip = new Trip(tripsData.trips)
+  const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData);
+  const pendingTrips = trip.filterTripsByField('status', 'pending');
+  domUpdates.insertTripsList(pendingTrips, totalSpentOnTrips);
 }
 
 function logUserIn() {

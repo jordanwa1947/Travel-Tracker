@@ -9,10 +9,10 @@ describe('Trip Class', function() {
   beforeEach(function() {
     tripsData = [
       {"id":1,"userID":43,"destinationID":49,"travelers":1,"date":"2019/09/16","duration":8,"status":"approved","suggestedActivities":[]},
-      {"id":2,"userID":35,"destinationID":14,"travelers":5,"date":"2020/10/04","duration":18,"status":"pending","suggestedActivities":[]},
+      {"id":2,"userID":35,"destinationID":14,"travelers":5,"date":"2020/02/25","duration":18,"status":"pending","suggestedActivities":[]},
       {"id":3,"userID":3,"destinationID":49,"travelers":4,"date":"2020/05/22","duration":17,"status":"pending","suggestedActivities":[]},
       {"id":4,"userID":43,"destinationID":14,"travelers":2,"date":"2020/02/25","duration":10,"status":"approved","suggestedActivities":[]},
-      {"id":5,"userID":42,"destinationID":14,"travelers":3,"date":"2020/04/30","duration":18,"status":"approved","suggestedActivities":[]},
+      {"id":5,"userID":42,"destinationID":14,"travelers":3,"date":"2020/02/25","duration":18,"status":"approved","suggestedActivities":[]},
       {"id":6,"userID":29,"destinationID":14,"travelers":3,"date":"2020/06/29","duration":9,"status":"approved","suggestedActivities":[]}
     ]
 
@@ -29,7 +29,7 @@ describe('Trip Class', function() {
 
   it('should find trips with an id', function() {
     const trip = new Trip(tripsData);
-    expect(trip.findUserTrips(43)).to.deep.eq([
+    expect(trip.filterTripsByField('userID', 43)).to.deep.eq([
       {
         "date": "2019/09/16",
         "destinationID": 49,
@@ -64,10 +64,10 @@ describe('Trip Class', function() {
   });
 
   it('should be able to find pending trip requests for an agent', function() {
-    const pendingTrips = new Trip(tripsData).findTripsByStatus('pending');
+    const pendingTrips = new Trip(tripsData).filterTripsByField('status', 'pending');
     expect(pendingTrips).to.deep.eq([
       {
-        "date": "2020/10/04",
+        "date": "2020/02/25",
         "destinationID": 14,
         "duration": 18,
         "id": 2,
@@ -85,6 +85,42 @@ describe('Trip Class', function() {
         "suggestedActivities": [],
         "travelers": 4,
         "userID": 3,
+      }
+    ]);
+  })
+
+  it('should be able to find Number of travelers on trips for a date', function() {
+    const todaysTrips = new Trip(tripsData).filterTripsByField("date", "2020/02/25");
+    expect(todaysTrips).to.deep.eq([
+      {
+        "date": "2020/02/25",
+        "destinationID": 14,
+        "duration": 18,
+        "id": 2,
+        "status": "pending",
+        "suggestedActivities": [],
+        "travelers": 5,
+        "userID": 35,
+      },
+      {
+        "date": "2020/02/25",
+        "destinationID": 14,
+        "duration": 10,
+        "id": 4,
+        "status": "approved",
+        "suggestedActivities": [],
+        "travelers": 2,
+        "userID": 43,
+      },
+      {
+        "date": "2020/02/25",
+        "destinationID": 14,
+        "duration": 18,
+        "id": 5,
+        "status": "approved",
+        "suggestedActivities": [],
+        "travelers": 3,
+        "userID": 42,
       }
     ]);
   })
