@@ -28,22 +28,23 @@ function fetchUserInfo() {
   });
 }
 
-function fetchTripsInfo() {
+async function fetchTripsInfo() {
+  const destinationsData = await fetchDestinations();
   fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/trips/trips')
     .then(response => response.json())
     .then(tripData => {
-      fetchDestinations(tripData)
+      const trips = new Trip(tripData.trips)
+      const userTrips = trips.findUserTrips(50);
+      const totalSpentOnTrips = trips.calculateTotalSpentOnTrips(destinationsData, 50);
+      domUpdates.insertTripsList(userTrips, totalSpentOnTrips);
     });
 }
 
-function fetchDestinations(tripData) {
-  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/destinations/destinations')
+function fetchDestinations() {
+  return fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/destinations/destinations')
     .then(response => response.json())
     .then(destinationsData => {
-      const trips = new Trip(tripData.trips)
-      const userTrips = trips.findUserTrips(50);
-      const totalSpentOnTrips = trips.calculateTotalSpentOnTrips(destinationsData.destinations, 50);
-      domUpdates.insertTripsList(userTrips, totalSpentOnTrips);
+      return destinationsData.destinations;
     });
 }
 
