@@ -10,7 +10,7 @@ class Trip {
   }
 
   calculateTotalSpentOnTrips(destinations, userId) {
-    const userTrips = this.findUserTrips(userId);
+    const userTrips = userId ? this.findUserTrips(userId) : this.tripData;
     const totalTripCost =  userTrips.reduce((totalCost, userTrip) => {
       let userDestination = destinations.find(destination => {
         return destination.id === userTrip.destinationID

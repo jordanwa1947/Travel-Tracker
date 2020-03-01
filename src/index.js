@@ -28,15 +28,25 @@ function fetchUserInfo() {
   });
 }
 
-async function fetchTripsInfo() {
+function getAndDisplayUserTrips(tripsData, destinationsData) {
+  const trips = new Trip(tripsData.trips)
+  const userTrips = trips.findUserTrips(50);
+  const totalSpentOnTrips = trips.calculateTotalSpentOnTrips(destinationsData, 50);
+  domUpdates.insertTripsList(userTrips, totalSpentOnTrips);
+}
+
+function getAndDisplayAgentTrips(tripsData, destinationsData) {
+  const trips = new Trip(tripsData.trips)
+  const totalSpentOnTrips = trips.calculateTotalSpentOnTrips(destinationsData);
+  domUpdates.insertTripsList(tripsData.trips, totalSpentOnTrips);
+}
+
+async function fetchTripsInfo(displayTripsFunction) {
   const destinationsData = await fetchDestinations();
   fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/trips/trips')
     .then(response => response.json())
     .then(tripData => {
-      const trips = new Trip(tripData.trips)
-      const userTrips = trips.findUserTrips(50);
-      const totalSpentOnTrips = trips.calculateTotalSpentOnTrips(destinationsData, 50);
-      domUpdates.insertTripsList(userTrips, totalSpentOnTrips);
+      displayTripsFunction(tripData, destinationsData)
     });
 }
 
@@ -54,10 +64,10 @@ function logUserIn() {
   if (username === 'traveler50' && password === 'travel2020') {
     domUpdates.removeLoginForm();
     fetchUserInfo();
-    fetchTripsInfo();
+    fetchTripsInfo(getAndDisplayUserTrips);
   } else if (username === 'agency' && password === 'travel2020') {
     domUpdates.removeLoginForm();
     fetchUserInfo();
-    fetchTripsInfo();
+    fetchTripsInfo(getAndDisplayAgentTrips);
   }
 }
