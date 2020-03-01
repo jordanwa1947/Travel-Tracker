@@ -49,14 +49,28 @@ function getAndDisplayUserTrips(tripsData, destinationsData) {
   const trip = new Trip(tripsData.trips)
   const userTrips = trip.filterTripsByField('userID', 50);
   const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData, 50);
-  domUpdates.insertTripsList(userTrips, totalSpentOnTrips);
+  domUpdates.insertTripsList(userTrips);
+  domUpdates.insertTotalSpentOnTrips(totalSpentOnTrips);
+}
+
+function formatDate() {
+  const date = new Date()
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  if (day < 10) day = '0' + day;
+  if (month < 10) month = '0' + month;
+  return date.getFullYear() + '/' + month + '/' + day;
 }
 
 function getAndDisplayAgentTrips(tripsData, destinationsData) {
   const trip = new Trip(tripsData.trips)
   const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData);
   const pendingTrips = trip.filterTripsByField('status', 'pending');
-  domUpdates.insertTripsList(pendingTrips, totalSpentOnTrips);
+  debugger;
+  const usersOnTripsToday = trip.filterTripsByField('date', formatDate());
+  domUpdates.insertTripsList(pendingTrips);
+  domUpdates.insertTotalSpentOnTrips(totalSpentOnTrips);
+  domUpdates.insertNumberOfUserOnTripsToday(usersOnTripsToday.length);
 }
 
 function logUserIn() {

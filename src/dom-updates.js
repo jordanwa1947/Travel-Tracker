@@ -22,7 +22,7 @@ export default {
     $('#login-form-sect')[0].innerHTML = ``;
   },
 
-  insertTripsList: (trips, totalSpentOnTrips) => {
+  insertTripsList: (trips) => {
     const tripsHTML = trips.reduce((tripListHTML, trip) => {
       tripListHTML += `
         <li>
@@ -33,8 +33,14 @@ export default {
         </li>`
       return tripListHTML;
     }, ``);
-    $('#trips-list')[0].innerHTML = `
-      <h3>Total Spent on Trips: ${totalSpentOnTrips}</h3>
-      <ul>${tripsHTML}</ul>`;
+    $('#trips-list')[0].innerHTML = `<ul>${tripsHTML}</ul>`;
+  },
+
+  insertTotalSpentOnTrips: (totalSpentOnTrips) => {
+    $('#total-spent-on-trips')[0].innerText = `Total Spent on Trips: ${totalSpentOnTrips}`
+  },
+
+  insertNumberOfUserOnTripsToday: (numberOfUserOnTripsToday) => {
+    $('#numb-of-users-on-trips-today')[0].innerText = `Number of Users On Trips Today: ${numberOfUserOnTripsToday}`
   }
 }
