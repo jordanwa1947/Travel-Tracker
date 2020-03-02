@@ -36,7 +36,7 @@ export default {
         </li>`
       return tripListHTML;
     }, ``);
-    $('#trips-list')[0].innerHTML = `<ul>${tripsHTML}</ul>`;
+    $('#trips-list')[0].innerHTML = `<ul id="trips-list-head">${tripsHTML}</ul>`;
   },
 
   insertCreateTripForm: (destinations) => {
@@ -64,5 +64,23 @@ export default {
     if (estimatedCost) {
       $('#estimated-cost')[0].innerText = `Estimated Cost: ${estimatedCost}`;
     }
+  },
+
+  insertNewTrip: (trip) => {
+    tripHTML += `
+      <li>
+        <span>Date: ${trip.date}</span>
+        <span>Status: ${trip.status}</span>
+        <span>${trip.duration} Days</span>
+      </li>`
+    $('#trips-list-head')[0].prepend(`${tripHTML}`);
+  },
+
+  insertAgencyProfit: (profit) => {
+    $('#total-profit-on-trips')[0].innerText = `Total Profit: ${profit}`;
+  },
+
+  insertNumberOfUserOnTripsToday: (numberOfUsersOnTrips) => {
+    $('#numb-of-users-on-trips-today')[0].innerText = `Number Of Users On Trips: ${numberOfUsersOnTrips}`
   }
 }
