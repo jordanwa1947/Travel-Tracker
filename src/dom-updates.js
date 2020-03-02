@@ -22,29 +22,38 @@ export default {
     $('#login-form-sect')[0].innerHTML = ``;
   },
 
+  insertTotalSpentOnTrips: (totalSpentOnTrips) => {
+    $('#total-spent-on-trips')[0].innerText = `Total Spent On Trips: ${totalSpentOnTrips}`
+  },
+
   insertTripsList: (trips) => {
     const tripsHTML = trips.reduce((tripListHTML, trip) => {
       tripListHTML += `
         <li>
-          <span>Status: ${trip.status}</span>
           <span>Date: ${trip.date}</span>
+          <span>Status: ${trip.status}</span>
           <span>${trip.duration} Days</span>
-          <span>${trip.travelers}</span>
         </li>`
       return tripListHTML;
     }, ``);
     $('#trips-list')[0].innerHTML = `<ul>${tripsHTML}</ul>`;
   },
 
-  insertTotalSpentOnTrips: (totalSpentOnTrips) => {
-    $('#total-spent-on-trips')[0].innerText = `Total Spent on Trips: ${totalSpentOnTrips}`
-  },
-
-  insertAgencyProfit: (grossProfit) => {
-    $('#total-profit-on-trips')[0].innerText = `Total Proft on Trips: ${grossProfit}`
-  },
-
-  insertNumberOfUserOnTripsToday: (numberOfUserOnTripsToday) => {
-    $('#numb-of-users-on-trips-today')[0].innerText = `Number of Users On Trips Today: ${numberOfUserOnTripsToday}`
+  insertCreateTripForm: (destinations) => {
+    const dropDownHTML = destinations.reduce((destinationsDropDown, destination) => {
+      return destinationsDropDown + `
+      <option value="${destination.id}">
+        ${destination.destination}
+      </option>`
+    }, ``)
+    $('#create-trip-section')[0].innerHTML = `
+    <form class="create-trip-form">
+      Duration: <input type="number">
+      Date: <input type="date">
+      Travelers: <input type="number">
+      <select>
+        ${dropDownHTML}
+      </select>
+    </form>`
   }
 }

@@ -41,6 +41,7 @@ function fetchDestinations() {
   return fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/destinations/destinations')
     .then(response => response.json())
     .then(destinationsData => {
+      domUpdates.insertCreateTripForm(destinationsData.destinations);
       return destinationsData.destinations;
     });
 }
