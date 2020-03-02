@@ -14,8 +14,8 @@ export default {
         <input id="username-input" type="text" id="username-input" name="username"><br>
         <label for="password-input">Password</label><br>
         <input id="password-input" type="text" name="password">
-        <button id="login-button" class="button" type="button">Login</button>
-      </form>`
+      </form>
+      <button id="login-button" class="button" type="button">Login</button>`
   },
 
   removeLoginForm: () => {
@@ -42,18 +42,27 @@ export default {
   insertCreateTripForm: (destinations) => {
     const dropDownHTML = destinations.reduce((destinationsDropDown, destination) => {
       return destinationsDropDown + `
-      <option value="${destination.id}">
+      <option value='${JSON.stringify(destination)}'>
         ${destination.destination}
       </option>`
     }, ``)
     $('#create-trip-section')[0].innerHTML = `
     <form class="create-trip-form">
-      Duration: <input type="number">
-      Date: <input type="date">
-      Travelers: <input type="number">
-      <select>
+      Duration: <input id="duration-field" type="number">
+      Date: <input id="date-field" type="date">
+      Travelers: <input id="travelers-field" type="number">
+      <select id="destinations-drop-down">
         ${dropDownHTML}
       </select>
-    </form>`
+      <button id="create-trip-button" class="button" type="button">Add Trip</button>
+    </form>
+    <p id="estimated-cost"></p>`
+  },
+
+  insertEstimatedCost: (estimatedCost) => {
+    $('#estimated-cost').empty();
+    if (estimatedCost) {
+      $('#estimated-cost')[0].innerText = `Estimated Cost: ${estimatedCost}`;
+    }
   }
 }

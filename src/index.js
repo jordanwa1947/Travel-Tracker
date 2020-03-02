@@ -18,6 +18,24 @@ let user;
 domUpdates.insertLoginForm();
 
 $('#login-button').click(logUserIn);
+$('#create-trip-button').click(createTripPostRequest);
+$('#create-trip-section').on('input', calculateEstimatedTripCost);
+
+function calculateEstimatedTripCost() {
+  const duration = $('#duration-field')[0].value;
+  const date = $('#date-field')[0].value;
+  const travelers = $('#travelers-field')[0].value;
+  const destination = $('#destinations-drop-down')[0].value;
+  if (duration && date && travelers && destination) {
+    const destinationJSON = JSON.parse(destination);
+    const lodgingCost = destinationJSON.estimatedLodgingCostPerDay * duration * travelers;
+    const travelCost = destinationJSON.estimatedFlightCostPerPerson * travelers;
+    const estimatedCost = lodgingCost + travelCost
+    domUpdates.insertEstimatedCost(estimatedCost + estimatedCost * 0.1);
+  } else {
+    domUpdates.insertEstimatedCost('');
+  }
+}
 
 function fetchUserInfo() {
   fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/travelers/travelers/50')
