@@ -19,7 +19,31 @@ domUpdates.insertLoginForm();
 
 $('#login-button').click(logUserIn);
 $('#create-trip-section').click(createTripPostRequest);
+$('#trips-list').click(deleteTripRequest);
 $('#create-trip-section').on('input', calculateEstimatedTripCost);
+
+function deleteTripRequest() {
+  if (event.target.classList.contains('deny-trip-button')) {
+    const tripId = event.target.parentElement.id;
+    debugger;
+    event.target.parentElement.parentElement.remove();
+    const postBody = JSON.stringify({
+      "id": Number.parseInt(tripId)
+    });
+    fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/trips/trips', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: postBody
+    })
+    .then(response => response.json())
+    .then(responseValue => {
+
+    })
+    .catch(error => console.log(error.message))
+  }
+}
 
 function createTripPostRequest(event) {
   const duration = $('#duration-field')[0].value;
@@ -101,7 +125,7 @@ function getAndDisplayUserTrips(tripsData, destinationsData) {
   const userTrips = trip.filterTripsByField('userID', 50);
   const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData, 50);
   const agentFee = totalSpentOnTrips * 0.1
-  domUpdates.insertTripsList(userTrips);
+  domUpdates.insertUserTripsList(userTrips);
   domUpdates.insertTotalSpentOnTrips(totalSpentOnTrips + agentFee);
 }
 
@@ -119,7 +143,7 @@ function getAndDisplayAgentTrips(tripsData, destinationsData) {
   const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData);
   const pendingTrips = trip.filterTripsByField('status', 'pending');
   const usersOnTripsToday = trip.findTripsHappeningCurrently();
-  domUpdates.insertTripsList(pendingTrips);
+  domUpdates.insertAgentTripsList(pendingTrips);
   domUpdates.insertAgencyProfit(totalSpentOnTrips * 0.1);
   domUpdates.insertNumberOfUserOnTripsToday(usersOnTripsToday.length);
 }

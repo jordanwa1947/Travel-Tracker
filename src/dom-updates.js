@@ -26,13 +26,33 @@ export default {
     $('#total-spent-on-trips')[0].innerText = `Total Spent On Trips: ${totalSpentOnTrips}`
   },
 
-  insertTripsList: (trips) => {
+  insertUserTripsList: (trips) => {
     const tripsHTML = trips.reduce((tripListHTML, trip) => {
       tripListHTML += `
         <li>
           <span>Date: ${trip.date}</span>
           <span>Status: ${trip.status}</span>
           <span>${trip.duration} Days</span>
+          <span id="${trip.id}">
+            <button class="deny-trip-button">Delete</button>
+          </span>
+        </li>`
+      return tripListHTML;
+    }, ``);
+    $('#trips-list')[0].innerHTML = `<ul id="trips-list-head">${tripsHTML}</ul>`;
+  },
+
+  insertAgentTripsList: (trips) => {
+    const tripsHTML = trips.reduce((tripListHTML, trip) => {
+      tripListHTML += `
+        <li>
+          <span>Date: ${trip.date}</span>
+          <span>Status: ${trip.status}</span>
+          <span>${trip.duration} Days</span>
+          <span id="${trip.id}">
+            <button class="approve-trip-button">Approve</button>
+            <button class="deny-trip-button">Deny</button>
+          </span>
         </li>`
       return tripListHTML;
     }, ``);
