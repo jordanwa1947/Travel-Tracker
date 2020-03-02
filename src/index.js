@@ -18,8 +18,40 @@ let user;
 domUpdates.insertLoginForm();
 
 $('#login-button').click(logUserIn);
-$('#create-trip-button').click(createTripPostRequest);
+$('#create-trip-section').click(createTripPostRequest);
 $('#create-trip-section').on('input', calculateEstimatedTripCost);
+
+function createTripPostRequest(event) {
+  const duration = $('#duration-field')[0].value;
+  const date = $('#date-field')[0].value;
+  const travelers = $('#travelers-field')[0].value;
+  const destination = $('#destinations-drop-down')[0].value;
+  if (event.target.id === 'create-trip-button' && duration && date && travelers && destination) {
+    const destinationId = Number.parseInt(JSON.parse(destination).id);
+    const postBody = JSON.stringify({
+      "id": Date.now(),
+      "userID": 50,
+      "destinationID": destinationId,
+      "travelers": Number.parseInt(travelers),
+      "date": date,
+      "duration": Number.parseInt(duration),
+      "status": "pending",
+      "suggestedActivities": []
+    });
+    fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/trips/trips', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: postBody
+    })
+    .then(response => response.json())
+    .then(newTripData => {
+      domUpdates.insertNewTrip(newTripData.newResource);
+    })
+    .catch(error => console.log(error.message))
+  }
+}
 
 function calculateEstimatedTripCost() {
   const duration = $('#duration-field')[0].value;
@@ -101,7 +133,6 @@ function logUserIn() {
     fetchTripsInfo(getAndDisplayUserTrips);
   } else if (username === 'agency' && password === 'travel2020') {
     domUpdates.removeLoginForm();
-    fetchUserInfo();
     fetchTripsInfo(getAndDisplayAgentTrips);
   }
 }

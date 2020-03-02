@@ -67,13 +67,13 @@ export default {
   },
 
   insertNewTrip: (trip) => {
-    tripHTML += `
+    const tripHTML = `
       <li>
         <span>Date: ${trip.date}</span>
         <span>Status: ${trip.status}</span>
         <span>${trip.duration} Days</span>
       </li>`
-    $('#trips-list-head')[0].prepend(`${tripHTML}`);
+    $('#trips-list-head').prepend(tripHTML);
   },
 
   insertAgencyProfit: (profit) => {
