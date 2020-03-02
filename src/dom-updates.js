@@ -31,7 +31,7 @@ export default {
       tripListHTML += `
         <li>
           <span>Date: ${trip.date}</span>
-          <span>Status: ${trip.status}</span>
+          <span class="trip-status">Status: ${trip.status}</span>
           <span>${trip.duration} Days</span>
           <span id="${trip.id}">
             <button class="deny-trip-button">Delete</button>
@@ -47,7 +47,7 @@ export default {
       tripListHTML += `
         <li>
           <span>Date: ${trip.date}</span>
-          <span>Status: ${trip.status}</span>
+          <span class="trip-status">Status: ${trip.status}</span>
           <span>${trip.duration} Days</span>
           <span id="${trip.id}">
             <button class="approve-trip-button">Approve</button>
@@ -90,8 +90,11 @@ export default {
     const tripHTML = `
       <li>
         <span>Date: ${trip.date}</span>
-        <span>Status: ${trip.status}</span>
+        <span class="trip-status">Status: ${trip.status}</span>
         <span>${trip.duration} Days</span>
+        <span id="${trip.id}">
+          <button class="deny-trip-button">Delete</button>
+        </span>
       </li>`
     $('#trips-list-head').prepend(tripHTML);
   },

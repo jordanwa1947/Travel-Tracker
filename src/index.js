@@ -20,18 +20,42 @@ domUpdates.insertLoginForm();
 $('#login-button').click(logUserIn);
 $('#create-trip-section').click(createTripPostRequest);
 $('#trips-list').click(deleteTripRequest);
+$('#trips-list').click(approveTripRequest);
 $('#create-trip-section').on('input', calculateEstimatedTripCost);
 
 function deleteTripRequest() {
   if (event.target.classList.contains('deny-trip-button')) {
     const tripId = event.target.parentElement.id;
-    debugger;
     event.target.parentElement.parentElement.remove();
     const postBody = JSON.stringify({
       "id": Number.parseInt(tripId)
     });
     fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/trips/trips', {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: postBody
+    })
+    .then(response => response.json())
+    .then(responseValue => {
+
+    })
+    .catch(error => console.log(error.message))
+  }
+}
+
+function approveTripRequest(event) {
+  if (event.target.classList.contains('approve-trip-button')) {
+    let tripId = event.target.parentElement.id;
+    const tripElement = event.target.parentElement.parentElement
+    tripElement.querySelector('.trip-status').innerText = 'Status: approved'
+    const postBody = JSON.stringify({
+      "id": Number.parseInt(tripId),
+      "status": "approved",
+    });
+    fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/trips/updateTrip', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
