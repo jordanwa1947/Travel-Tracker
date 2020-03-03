@@ -29,9 +29,12 @@ class Trip {
       let userDestination = destinations.find(destination => {
         return destination.id === userTrip.destinationID
       });
-      let lodgingCost = userDestination.estimatedLodgingCostPerDay * userTrip.duration * userTrip.travelers;
-      let travelCost = userDestination.estimatedFlightCostPerPerson * userTrip.travelers;
-      return totalCost + lodgingCost + travelCost;
+      if (userDestination) {
+        let lodgingCost = userDestination.estimatedLodgingCostPerDay * userTrip.duration * userTrip.travelers;
+        let travelCost = userDestination.estimatedFlightCostPerPerson * userTrip.travelers;
+        return totalCost + lodgingCost + travelCost;
+      }
+      return totalCost;
     }, 0)
     return totalTripCost;
   }
