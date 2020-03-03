@@ -6,6 +6,7 @@ import $ from 'jquery';
 import domUpdates from './dom-updates.js'
 
 import Trip from './trip';
+import User from './user';
 
 // An example of how you tell webpack to use a CSS (SCSS) file
 import './css/styles.scss';
@@ -22,6 +23,24 @@ $('#create-trip-section').click(createTripPostRequest);
 $('#trips-list').click(deleteTripRequest);
 $('#trips-list').click(approveTripRequest);
 $('#create-trip-section').on('input', calculateEstimatedTripCost);
+$('#user-search-section').click(findAndDisplayUsers);
+$('#user-search-section').click(displayUserTrips);
+
+function displayUserTrips() {
+  if (event.target.classList.contains('view-trips-button')) {
+    fetchTripsInfo(getAndDisplayUserTrips)
+  }
+}
+
+async function findAndDisplayUsers(event) {
+  if (event.target.classList.contains('user-search-button')) {
+    const allUsers = await fetchAllUsers();
+    const query = $('#user-search-field')[0].value;
+    const searchedUsers = User.searchUsersByName(allUsers, query);
+    domUpdates.insertUserSearch();
+    domUpdates.insertAllUsers(searchedUsers);
+  }
+}
 
 function deleteTripRequest() {
   if (event.target.classList.contains('deny-trip-button')) {
@@ -117,12 +136,19 @@ function calculateEstimatedTripCost() {
   }
 }
 
-function fetchUserInfo() {
-  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/travelers/travelers/50')
+function fetchAllUsers() {
+  return fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/travelers/travelers')
+    .then(response => response.json())
+    .then(usersData => {
+      return usersData.travelers;
+  });
+}
+
+function fetchUserInfo(userId) {
+  fetch(`https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/travelers/travelers/${userId}`)
     .then(response => response.json())
     .then(userData => {
-      user = userData;
-      domUpdates.insertUserMessage(user);
+      domUpdates.insertUserMessage(userData);
   });
 }
 
@@ -168,6 +194,7 @@ function getAndDisplayAgentTrips(tripsData, destinationsData) {
   const pendingTrips = trip.filterTripsByField('status', 'pending');
   const usersOnTripsToday = trip.findTripsHappeningCurrently();
   domUpdates.insertAgentTripsList(pendingTrips);
+  domUpdates.insertUserSearch();
   domUpdates.insertAgencyProfit(totalSpentOnTrips * 0.1);
   domUpdates.insertNumberOfUserOnTripsToday(usersOnTripsToday.length);
 }
@@ -177,7 +204,7 @@ function logUserIn() {
   const password = $('#password-input')[0].value
   if (username === 'traveler50' && password === 'travel2020') {
     domUpdates.removeLoginForm();
-    fetchUserInfo();
+    fetchUserInfo(50);
     fetchTripsInfo(getAndDisplayUserTrips);
   } else if (username === 'agency' && password === 'travel2020') {
     domUpdates.removeLoginForm();
