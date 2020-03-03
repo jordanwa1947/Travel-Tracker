@@ -12,7 +12,8 @@ import User from './user';
 import './css/styles.scss';
 
 // An e xample of how you tell webpack to use an image (also need to link to it in the index.html)
-import './images/turing-logo.png'
+import './images/tropical-ocean-huts.jpg'
+
 
 let user;
 
