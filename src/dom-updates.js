@@ -105,5 +105,28 @@ export default {
 
   insertNumberOfUserOnTripsToday: (numberOfUsersOnTrips) => {
     $('#numb-of-users-on-trips-today')[0].innerText = `Number Of Users On Trips: ${numberOfUsersOnTrips}`
+  },
+
+  insertUserSearch: (user) => {
+    $('#user-search-section')[0].innerHTML = `
+      <form>
+        <input id="user-search-field" type="text" />
+        <button class="user-search-button" type="button">Search</button>
+      </form>
+    `
+  },
+
+  insertAllUsers: (users) => {
+    const userList = users.reduce((usersHTML, user) => {
+      usersHTML += `
+      <div id="${user.id}">
+        <h3>${user.name}</h3>
+        <p>${user.travelerType}</p>
+        <button class="view-trips-button" type="button">View Trips</button>
+      <div>
+      `
+      return usersHTML
+    }, ``)
+    $('#user-search-section').append(userList);
   }
 }
