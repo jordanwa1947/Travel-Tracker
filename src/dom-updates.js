@@ -26,13 +26,33 @@ export default {
     $('#total-spent-on-trips')[0].innerText = `Total Spent On Trips: ${totalSpentOnTrips}`
   },
 
-  insertTripsList: (trips) => {
+  insertUserTripsList: (trips) => {
     const tripsHTML = trips.reduce((tripListHTML, trip) => {
       tripListHTML += `
         <li>
           <span>Date: ${trip.date}</span>
-          <span>Status: ${trip.status}</span>
+          <span class="trip-status">Status: ${trip.status}</span>
           <span>${trip.duration} Days</span>
+          <span id="${trip.id}">
+            <button class="deny-trip-button">Delete</button>
+          </span>
+        </li>`
+      return tripListHTML;
+    }, ``);
+    $('#trips-list')[0].innerHTML = `<ul id="trips-list-head">${tripsHTML}</ul>`;
+  },
+
+  insertAgentTripsList: (trips) => {
+    const tripsHTML = trips.reduce((tripListHTML, trip) => {
+      tripListHTML += `
+        <li>
+          <span>Date: ${trip.date}</span>
+          <span class="trip-status">Status: ${trip.status}</span>
+          <span>${trip.duration} Days</span>
+          <span id="${trip.id}">
+            <button class="approve-trip-button">Approve</button>
+            <button class="deny-trip-button">Deny</button>
+          </span>
         </li>`
       return tripListHTML;
     }, ``);
@@ -70,8 +90,11 @@ export default {
     const tripHTML = `
       <li>
         <span>Date: ${trip.date}</span>
-        <span>Status: ${trip.status}</span>
+        <span class="trip-status">Status: ${trip.status}</span>
         <span>${trip.duration} Days</span>
+        <span id="${trip.id}">
+          <button class="deny-trip-button">Delete</button>
+        </span>
       </li>`
     $('#trips-list-head').prepend(tripHTML);
   },
@@ -82,5 +105,28 @@ export default {
 
   insertNumberOfUserOnTripsToday: (numberOfUsersOnTrips) => {
     $('#numb-of-users-on-trips-today')[0].innerText = `Number Of Users On Trips: ${numberOfUsersOnTrips}`
+  },
+
+  insertUserSearch: (user) => {
+    $('#user-search-section')[0].innerHTML = `
+      <form>
+        <input id="user-search-field" type="text" />
+        <button class="user-search-button" type="button">Search</button>
+      </form>
+    `
+  },
+
+  insertAllUsers: (users) => {
+    const userList = users.reduce((usersHTML, user) => {
+      usersHTML += `
+      <div id="${user.id}">
+        <h3>${user.name}</h3>
+        <p>${user.travelerType}</p>
+        <button class="view-trips-button" type="button">View Trips</button>
+      <div>
+      `
+      return usersHTML
+    }, ``)
+    $('#user-search-section').append(userList);
   }
 }

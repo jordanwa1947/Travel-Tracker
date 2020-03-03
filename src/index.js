@@ -6,12 +6,14 @@ import $ from 'jquery';
 import domUpdates from './dom-updates.js'
 
 import Trip from './trip';
+import User from './user';
 
 // An example of how you tell webpack to use a CSS (SCSS) file
 import './css/styles.scss';
 
 // An e xample of how you tell webpack to use an image (also need to link to it in the index.html)
-import './images/turing-logo.png'
+import './images/tropical-ocean-huts.jpg'
+
 
 let user;
 
@@ -19,7 +21,73 @@ domUpdates.insertLoginForm();
 
 $('#login-button').click(logUserIn);
 $('#create-trip-section').click(createTripPostRequest);
+$('#trips-list').click(deleteTripRequest);
+$('#trips-list').click(approveTripRequest);
 $('#create-trip-section').on('input', calculateEstimatedTripCost);
+$('#user-search-section').click(findAndDisplayUsers);
+$('#user-search-section').click(displayUserTrips);
+
+function displayUserTrips() {
+  if (event.target.classList.contains('view-trips-button')) {
+    fetchTripsInfo(getAndDisplayUserTrips)
+  }
+}
+
+async function findAndDisplayUsers(event) {
+  if (event.target.classList.contains('user-search-button')) {
+    const allUsers = await fetchAllUsers();
+    const query = $('#user-search-field')[0].value;
+    const searchedUsers = User.searchUsersByName(allUsers, query);
+    domUpdates.insertUserSearch();
+    domUpdates.insertAllUsers(searchedUsers);
+  }
+}
+
+function deleteTripRequest() {
+  if (event.target.classList.contains('deny-trip-button')) {
+    const tripId = event.target.parentElement.id;
+    event.target.parentElement.parentElement.remove();
+    const postBody = JSON.stringify({
+      "id": Number.parseInt(tripId)
+    });
+    fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/trips/trips', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: postBody
+    })
+    .then(response => response.json())
+    .then(responseValue => {
+
+    })
+    .catch(error => console.log(error.message))
+  }
+}
+
+function approveTripRequest(event) {
+  if (event.target.classList.contains('approve-trip-button')) {
+    let tripId = event.target.parentElement.id;
+    const tripElement = event.target.parentElement.parentElement
+    tripElement.querySelector('.trip-status').innerText = 'Status: approved'
+    const postBody = JSON.stringify({
+      "id": Number.parseInt(tripId),
+      "status": "approved",
+    });
+    fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/trips/updateTrip', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: postBody
+    })
+    .then(response => response.json())
+    .then(responseValue => {
+
+    })
+    .catch(error => console.log(error.message))
+  }
+}
 
 function createTripPostRequest(event) {
   const duration = $('#duration-field')[0].value;
@@ -69,12 +137,19 @@ function calculateEstimatedTripCost() {
   }
 }
 
-function fetchUserInfo() {
-  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/travelers/travelers/50')
+function fetchAllUsers() {
+  return fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/travelers/travelers')
+    .then(response => response.json())
+    .then(usersData => {
+      return usersData.travelers;
+  });
+}
+
+function fetchUserInfo(userId) {
+  fetch(`https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/travelers/travelers/${userId}`)
     .then(response => response.json())
     .then(userData => {
-      user = userData;
-      domUpdates.insertUserMessage(user);
+      domUpdates.insertUserMessage(userData);
   });
 }
 
@@ -101,7 +176,7 @@ function getAndDisplayUserTrips(tripsData, destinationsData) {
   const userTrips = trip.filterTripsByField('userID', 50);
   const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData, 50);
   const agentFee = totalSpentOnTrips * 0.1
-  domUpdates.insertTripsList(userTrips);
+  domUpdates.insertUserTripsList(userTrips);
   domUpdates.insertTotalSpentOnTrips(totalSpentOnTrips + agentFee);
 }
 
@@ -119,7 +194,8 @@ function getAndDisplayAgentTrips(tripsData, destinationsData) {
   const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData);
   const pendingTrips = trip.filterTripsByField('status', 'pending');
   const usersOnTripsToday = trip.findTripsHappeningCurrently();
-  domUpdates.insertTripsList(pendingTrips);
+  domUpdates.insertAgentTripsList(pendingTrips);
+  domUpdates.insertUserSearch();
   domUpdates.insertAgencyProfit(totalSpentOnTrips * 0.1);
   domUpdates.insertNumberOfUserOnTripsToday(usersOnTripsToday.length);
 }
@@ -129,7 +205,7 @@ function logUserIn() {
   const password = $('#password-input')[0].value
   if (username === 'traveler50' && password === 'travel2020') {
     domUpdates.removeLoginForm();
-    fetchUserInfo();
+    fetchUserInfo(50);
     fetchTripsInfo(getAndDisplayUserTrips);
   } else if (username === 'agency' && password === 'travel2020') {
     domUpdates.removeLoginForm();
