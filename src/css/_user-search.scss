@@ -1,0 +1,34 @@
+.user-search-column {
+  width: 200%;
+
+  form {
+
+    input {
+      width: 200px;
+      height: 21px;
+      border-radius: 4px 0px 0px 4px;
+      border: solid 1px rgba(0,0,0,0.2);
+    }
+
+    .user-search-button {
+      display: inline;
+      height: 25px;
+      border-radius: 0px 4px 4px 0px;
+      position: relative;
+      right: 5px;
+      bottom: 1px;
+    }
+  }
+
+  div {
+    width: 70%;
+    text-align: center;
+    padding: 20px;
+    margin: 40px auto;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2), -2px -2px 5px rgba(0,0,0,0.2);
+
+    .view-trips-button {
+      margin: auto;
+    }
+  }
+}
