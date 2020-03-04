@@ -26,8 +26,11 @@ $('#create-trip-section').on('input', calculateEstimatedTripCost);
 $('#user-search-section').click(findAndDisplayUsers);
 $('#user-search-section').click(displayUserTrips);
 
-function displayUserTrips() {
+async function displayUserTrips() {
   if (event.target.classList.contains('view-trips-button')) {
+    const userID = Number.parseInt(event.target.parentElement.id);
+    const userData = await fetchUserInfo(userID);
+    user = new User(userData)
     fetchTripsInfo(getAndDisplayUserTrips)
   }
 }
