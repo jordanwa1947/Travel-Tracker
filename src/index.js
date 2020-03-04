@@ -14,7 +14,6 @@ import './css/styles.scss';
 // An e xample of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/tropical-ocean-huts.jpg'
 
-
 let user;
 
 domUpdates.insertLoginForm();
@@ -98,7 +97,7 @@ function createTripPostRequest(event) {
     const destinationId = Number.parseInt(JSON.parse(destination).id);
     const postBody = JSON.stringify({
       "id": Date.now(),
-      "userID": 50,
+      "userID": user.id,
       "destinationID": destinationId,
       "travelers": Number.parseInt(travelers),
       "date": date,
@@ -146,10 +145,11 @@ function fetchAllUsers() {
 }
 
 function fetchUserInfo(userId) {
-  fetch(`https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/travelers/travelers/${userId}`)
+  return fetch(`https://fe-apps.herokuapp.com/api/v1/travel-tracker/1911/travelers/travelers/${userId}`)
     .then(response => response.json())
     .then(userData => {
       domUpdates.insertUserMessage(userData);
+      return userData
   });
 }
 
@@ -172,8 +172,8 @@ function fetchDestinations() {
 
 function getAndDisplayUserTrips(tripsData, destinationsData) {
   const trip = new Trip(tripsData.trips)
-  const userTrips = trip.filterTripsByField('userID', 50);
-  const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData, 50);
+  const userTrips = trip.filterTripsByField('userID', user.id);
+  const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData, user.id);
   const agentFee = totalSpentOnTrips * 0.1
   domUpdates.insertUserTripsList(userTrips);
   domUpdates.insertCreateTripForm(destinationsData);
@@ -200,12 +200,15 @@ function getAndDisplayAgentTrips(tripsData, destinationsData) {
   domUpdates.insertNumberOfUserOnTripsToday(usersOnTripsToday.length);
 }
 
-function logUserIn() {
+async function logUserIn() {
   const username = $('#username-input')[0].value
   const password = $('#password-input')[0].value
-  if (username === 'traveler50' && password === 'travel2020') {
+  const userID = Number.parseInt(username.slice(8));
+  const withinRange = userID > 0 && userID <= 50;
+  if (username.slice(0,8) === 'traveler' && password === 'travel2020' && withinRange) {
     domUpdates.removeLoginForm();
-    fetchUserInfo(50);
+    const userData = await fetchUserInfo(userID);
+    user = new User(userData)
     fetchTripsInfo(getAndDisplayUserTrips);
   } else if (username === 'agency' && password === 'travel2020') {
     domUpdates.removeLoginForm();

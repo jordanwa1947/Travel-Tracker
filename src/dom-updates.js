@@ -121,12 +121,12 @@ export default {
   },
 
   insertUserSearch: (user) => {
+    $('#user-search-section').toggleClass('hidden');
     $('#user-search-section')[0].innerHTML = `
       <form>
         <input id="user-search-field" type="text" />
         <button class="user-search-button" type="button">Search</button>
-      </form>
-    `
+      </form>`
   },
 
   insertAllUsers: (users) => {
