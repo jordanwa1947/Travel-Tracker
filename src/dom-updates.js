@@ -127,7 +127,7 @@ export default {
   },
 
   insertUserSearch: (user) => {
-    $('#user-search-section').toggleClass('hidden');
+    $('#user-search-section').removeClass('hidden');
     $('#user-search-section')[0].innerHTML = `
       <form>
         <input id="user-search-field" type="text" />
