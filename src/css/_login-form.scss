@@ -6,6 +6,7 @@
   padding: 40px;
   border-radius: 4px;
   opacity: 0.85;
+  margin-top: 60px;
 
   h1 {
     margin-top: 0px;
@@ -22,15 +23,15 @@
     border: solid 1px rgb(107,110,108);
     height: 25px;
     font-size: 1.2em;
+    padding: 3px;
   }
 
   button {
-    width: 101%;
+    width: 102%;
     margin-top: 30px;
-    height: 28px;
+    height: 30px;
     border-radius: 4px;
     font-size: 1.1em;
     border: solid 1px rgb(107,110,108);
-    cursor: pointer;
   }
 }
