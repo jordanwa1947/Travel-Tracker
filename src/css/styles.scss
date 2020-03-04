@@ -1,9 +1,19 @@
 @import 'login-form';
 @import 'header';
+@import 'trips-list';
+@import 'create-trip-form';
+@import 'user-info';
+@import 'user-search';
 
 body {
   text-align: center;
   font-family: 'Noto Sans TC', sans-serif;
+  margin: 0px;
+}
+
+main {
+  display: flex;
+  justify-content: center;
 }
 
 .login-image {
@@ -12,4 +22,9 @@ body {
 
 button {
   display: block;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
 }

@@ -1,0 +1,31 @@
+.trips-list-section {
+  .trips-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .trip-card {
+    flex-grow: 1;
+    min-width: 250px;
+    max-width: 500px;
+    padding: 10px;
+    margin: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2), -2px -2px 5px rgba(0,0,0,0.2);
+
+    button {
+      width: 50%;
+      margin: 10px auto;
+      color: white;
+      border-radius: 4px;
+    }
+
+    .deny-trip-button {
+      background-color: red;
+    }
+
+    .approve-trip-button {
+      background-color: green;
+    }
+  }
+}

@@ -19,7 +19,8 @@ export default {
   },
 
   removeLoginForm: () => {
-    $('#login-form-sect')[0].innerHTML = ``;
+    $('#login-form-sect').toggleClass('hidden');
+    $('body').toggleClass('login-image');
   },
 
   insertTotalSpentOnTrips: (totalSpentOnTrips) => {
@@ -29,34 +30,40 @@ export default {
   insertUserTripsList: (trips) => {
     const tripsHTML = trips.reduce((tripListHTML, trip) => {
       tripListHTML += `
-        <li>
-          <span>Date: ${trip.date}</span>
-          <span class="trip-status">Status: ${trip.status}</span>
-          <span>${trip.duration} Days</span>
-          <span id="${trip.id}">
+        <div class="trip-card">
+          <p>Date: ${trip.date}</p>
+          <p class="trip-status">Status: ${trip.status}</p>
+          <p>${trip.duration} Days</p>
+          <div id="${trip.id}">
             <button class="deny-trip-button">Delete</button>
-          </span>
-        </li>`
+          </div>
+        </div>`
       return tripListHTML;
     }, ``);
-    $('#trips-list')[0].innerHTML = `<ul id="trips-list-head">${tripsHTML}</ul>`;
+    $('#trips-list')[0].innerHTML = `
+      <section id="trips-list-container" class="trips-container">
+        ${tripsHTML}
+      </section>`;
   },
 
   insertAgentTripsList: (trips) => {
     const tripsHTML = trips.reduce((tripListHTML, trip) => {
       tripListHTML += `
-        <li>
-          <span>Date: ${trip.date}</span>
-          <span class="trip-status">Status: ${trip.status}</span>
-          <span>${trip.duration} Days</span>
-          <span id="${trip.id}">
+        <div class="trip-card">
+          <p>Date: ${trip.date}</p>
+          <p class="trip-status">Status: ${trip.status}</p>
+          <p>${trip.duration} Days</p>
+          <div id="${trip.id}">
             <button class="approve-trip-button">Approve</button>
             <button class="deny-trip-button">Deny</button>
-          </span>
-        </li>`
+          </div>
+        </div>`
       return tripListHTML;
     }, ``);
-    $('#trips-list')[0].innerHTML = `<ul id="trips-list-head">${tripsHTML}</ul>`;
+    $('#trips-list')[0].innerHTML = `
+    <section id="trips-list-container" class="trips-container">
+      ${tripsHTML}
+    </section>`;
   },
 
   insertCreateTripForm: (destinations) => {
@@ -68,9 +75,15 @@ export default {
     }, ``)
     $('#create-trip-section')[0].innerHTML = `
     <form class="create-trip-form">
-      Duration: <input id="duration-field" type="number">
-      Date: <input id="date-field" type="date">
-      Travelers: <input id="travelers-field" type="number">
+      <label for="duration-field">Duration:
+        <input id="duration-field" type="number">
+      </label>
+      <label for="date-field">Date:
+        <input id="date-field" type="date">
+      </label>
+      <label for="travelers-field">Travelers:
+        <input id="travelers-field" type="number">
+      </label>
       <select id="destinations-drop-down">
         ${dropDownHTML}
       </select>
@@ -123,7 +136,7 @@ export default {
         <h3>${user.name}</h3>
         <p>${user.travelerType}</p>
         <button class="view-trips-button" type="button">View Trips</button>
-      <div>
+      </div>
       `
       return usersHTML
     }, ``)
