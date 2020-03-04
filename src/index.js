@@ -88,6 +88,13 @@ function approveTripRequest(event) {
   }
 }
 
+function changeDateFormat(date) {
+  const dateArray = date.split('-');
+  const day = dateArray.pop();
+  dateArray.splice(1, 0, day);
+  return dateArray.join('/');
+}
+
 function createTripPostRequest(event) {
   const duration = $('#duration-field')[0].value;
   const date = $('#date-field')[0].value;
@@ -100,7 +107,7 @@ function createTripPostRequest(event) {
       "userID": user.id,
       "destinationID": destinationId,
       "travelers": Number.parseInt(travelers),
-      "date": date,
+      "date": changeDateFormat(date),
       "duration": Number.parseInt(duration),
       "status": "pending",
       "suggestedActivities": []
@@ -114,9 +121,9 @@ function createTripPostRequest(event) {
     })
     .then(response => response.json())
     .then(newTripData => {
-      domUpdates.insertNewTrip(newTripData.newResource);
+      const parsedDestination = JSON.parse(destination);
+      domUpdates.insertNewTrip(newTripData.newResource, parsedDestination);
     })
-    .catch(error => console.log(error.message))
   }
 }
 
@@ -141,7 +148,8 @@ function fetchAllUsers() {
     .then(response => response.json())
     .then(usersData => {
       return usersData.travelers;
-  });
+    })
+    .catch(error => console.log(error.message))
 }
 
 function fetchUserInfo(userId) {
@@ -150,7 +158,8 @@ function fetchUserInfo(userId) {
     .then(userData => {
       domUpdates.insertUserMessage(userData);
       return userData
-  });
+    })
+    .catch(error => console.log(error.message))
 }
 
 async function fetchTripsInfo(displayTripsFunction) {
@@ -159,7 +168,8 @@ async function fetchTripsInfo(displayTripsFunction) {
     .then(response => response.json())
     .then(tripData => {
       displayTripsFunction(tripData, destinationsData)
-    });
+    })
+    .catch(error => console.log(error.message))
 }
 
 function fetchDestinations() {
@@ -167,7 +177,17 @@ function fetchDestinations() {
     .then(response => response.json())
     .then(destinationsData => {
       return destinationsData.destinations;
-    });
+    })
+    .catch(error => console.log(error.message))
+}
+
+function pairTripsAndDestinations(trips, destinations) {
+  destinations.forEach(destination => {
+    trips.forEach(trip => {
+      if (trip.destinationID === destination.id) trip.destination = destination;
+    })
+  })
+  return trips;
 }
 
 function getAndDisplayUserTrips(tripsData, destinationsData) {
@@ -175,7 +195,8 @@ function getAndDisplayUserTrips(tripsData, destinationsData) {
   const userTrips = trip.filterTripsByField('userID', user.id);
   const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData, user.id);
   const agentFee = totalSpentOnTrips * 0.1
-  domUpdates.insertUserTripsList(userTrips);
+  const tripsAndDestinations = pairTripsAndDestinations(userTrips, destinationsData);
+  domUpdates.insertUserTripsList(tripsAndDestinations);
   domUpdates.insertCreateTripForm(destinationsData);
   domUpdates.insertTotalSpentOnTrips(totalSpentOnTrips + agentFee);
 }
@@ -194,7 +215,8 @@ function getAndDisplayAgentTrips(tripsData, destinationsData) {
   const totalSpentOnTrips = trip.calculateTotalSpentOnTrips(destinationsData);
   const pendingTrips = trip.filterTripsByField('status', 'pending');
   const usersOnTripsToday = trip.findTripsHappeningCurrently();
-  domUpdates.insertAgentTripsList(pendingTrips);
+  const tripsAndDestinations = pairTripsAndDestinations(pendingTrips, destinationsData);
+  domUpdates.insertAgentTripsList(tripsAndDestinations);
   domUpdates.insertUserSearch();
   domUpdates.insertAgencyProfit(totalSpentOnTrips * 0.1);
   domUpdates.insertNumberOfUserOnTripsToday(usersOnTripsToday.length);

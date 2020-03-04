@@ -31,6 +31,8 @@ export default {
     const tripsHTML = trips.reduce((tripListHTML, trip) => {
       tripListHTML += `
         <div class="trip-card">
+          <img src="${trip.destination.image}" alt="${trip.destination.alt}" />
+          <h3>${trip.destination.destination}</h3>
           <p>Date: ${trip.date}</p>
           <p class="trip-status">Status: ${trip.status}</p>
           <p>${trip.duration} Days</p>
@@ -50,6 +52,8 @@ export default {
     const tripsHTML = trips.reduce((tripListHTML, trip) => {
       tripListHTML += `
         <div class="trip-card">
+          <img src="${trip.destination.image}" alt="${trip.destination.alt}" />
+          <h3>${trip.destination.destination}</h3>
           <p>Date: ${trip.date}</p>
           <p class="trip-status">Status: ${trip.status}</p>
           <p>${trip.duration} Days</p>
@@ -99,17 +103,19 @@ export default {
     }
   },
 
-  insertNewTrip: (trip) => {
+  insertNewTrip: (trip, destination) => {
     const tripHTML = `
-      <li>
-        <span>Date: ${trip.date}</span>
-        <span class="trip-status">Status: ${trip.status}</span>
-        <span>${trip.duration} Days</span>
-        <span id="${trip.id}">
-          <button class="deny-trip-button">Delete</button>
-        </span>
-      </li>`
-    $('#trips-list-head').prepend(tripHTML);
+    <div class="trip-card">
+      <img src="${destination.image}" alt="${destination.alt}" />
+      <h3>${destination.destination}</h3>
+      <p>Date: ${trip.date}</p>
+      <p class="trip-status">Status: ${trip.status}</p>
+      <p>${trip.duration} Days</p>
+      <div id="${trip.id}">
+        <button class="deny-trip-button">Deny</button>
+      </div>
+    </div>`
+    $('#trips-list').prepend(tripHTML);
   },
 
   insertAgencyProfit: (profit) => {
