@@ -5,9 +5,21 @@
 .create-trip-form {
   text-align: left;
   display: inline-block;
-  width: 40%;
+  width: 100%;
+  margin-top: 20px;
 
   label {
     display: block;
+  }
+
+  input {
+    width: 100%;
+    border-radius: 4px;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 4px;
   }
 }

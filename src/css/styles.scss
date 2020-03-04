@@ -23,6 +23,12 @@ main {
 button {
   display: block;
   cursor: pointer;
+  background-color: cadetblue;
+  color: white;
+}
+
+input {
+  border: solid 1px rgba(0,0,0,0.2);
 }
 
 .hidden {

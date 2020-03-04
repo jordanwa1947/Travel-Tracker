@@ -112,7 +112,7 @@ export default {
       <p class="trip-status">Status: ${trip.status}</p>
       <p>${trip.duration} Days</p>
       <div id="${trip.id}">
-        <button class="deny-trip-button">Deny</button>
+        <button class="deny-trip-button">Delete</button>
       </div>
     </div>`
     $('#trips-list').prepend(tripHTML);
